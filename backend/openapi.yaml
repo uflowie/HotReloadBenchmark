@@ -1,0 +1,401 @@
+openapi: "3.0.0"
+info:
+  title: "Hot Reload Benchmark Mock API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8000"
+paths:
+  /users:
+    get:
+      summary: "List users"
+      responses:
+        "200":
+          description: "A list of users"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      summary: "Create a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /products:
+    get:
+      summary: "List products"
+      responses:
+        "200":
+          description: "A list of products"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      summary: "Create a product"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: "Product created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+  /orders:
+    get:
+      summary: "List orders"
+      responses:
+        "200":
+          description: "A list of orders"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      summary: "Create an order"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: "Order created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /inventory:
+    get:
+      summary: "List inventory items"
+      responses:
+        "200":
+          description: "A list of inventory items"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+    post:
+      summary: "Create an inventory item"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryItem"
+      responses:
+        "201":
+          description: "Inventory item created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+  /customers:
+    get:
+      summary: "List customers"
+      responses:
+        "200":
+          description: "A list of customers"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+    post:
+      summary: "Create a customer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+      responses:
+        "201":
+          description: "Customer created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+  /suppliers:
+    get:
+      summary: "List suppliers"
+      responses:
+        "200":
+          description: "A list of suppliers"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supplier"
+    post:
+      summary: "Create a supplier"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Supplier"
+      responses:
+        "201":
+          description: "Supplier created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+  /invoices:
+    get:
+      summary: "List invoices"
+      responses:
+        "200":
+          description: "A list of invoices"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+    post:
+      summary: "Create an invoice"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Invoice"
+      responses:
+        "201":
+          description: "Invoice created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+  /payments:
+    get:
+      summary: "List payments"
+      responses:
+        "200":
+          description: "A list of payments"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payment"
+    post:
+      summary: "Create a payment"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Payment"
+      responses:
+        "201":
+          description: "Payment created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+  /tickets:
+    get:
+      summary: "List support tickets"
+      responses:
+        "200":
+          description: "A list of tickets"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ticket"
+    post:
+      summary: "Create a ticket"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ticket"
+      responses:
+        "201":
+          description: "Ticket created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+  /notifications:
+    get:
+      summary: "List notifications"
+      responses:
+        "200":
+          description: "A list of notifications"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+    post:
+      summary: "Create a notification"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
+      responses:
+        "201":
+          description: "Notification created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+      required: [name, email]
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+      required: [name, price]
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        productId:
+          type: integer
+        quantity:
+          type: integer
+        total:
+          type: number
+      required: [productId, quantity]
+    InventoryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        productId:
+          type: integer
+        stock:
+          type: integer
+      required: [productId, stock]
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+      required: [name, email]
+    Supplier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        contact:
+          type: string
+      required: [name, contact]
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        orderId:
+          type: integer
+        amount:
+          type: number
+        date:
+          type: string
+      required: [orderId, amount]
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        invoiceId:
+          type: integer
+        amount:
+          type: number
+        method:
+          type: string
+      required: [invoiceId, amount, method]
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customerId:
+          type: integer
+        issue:
+          type: string
+        status:
+          type: string
+      required: [customerId, issue]
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        userId:
+          type: integer
+        message:
+          type: string
+        date:
+          type: string
+      required: [userId, message]
