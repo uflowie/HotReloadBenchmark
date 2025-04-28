@@ -8,14 +8,14 @@ This document outlines the sequential steps to implement a quantifiable performa
    - [ ] `/backend` – Python Django mock API
    - [x] `/clients/blazor` – Blazor WASM + Radzen
    - [x] `/clients/angular` – Angular CLI + Angular Material
-   - [ ] `/scripts` – automation & benchmarks
-   - [ ] `/tests` – Playwright tests & utilities
+   - [x] `/scripts` – automation & benchmarks
+   - [x] `/tests` – Playwright tests & utilities
 
 2. Initialize each client using templates:
    - [x] Blazor: `dotnet new blazorwasm`, add Radzen NuGet & CSS
    - [x] Angular: `ng new`, install `@angular/material` & HMR
 
-3. [ ] Add common configuration (CORS, base URLs).
+3. [x] Add common configuration (CORS, base URLs).
 
 ## 2. Backend API Implementation
 
