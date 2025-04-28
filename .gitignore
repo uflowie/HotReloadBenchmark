@@ -77,5 +77,24 @@ testem.log
 /typings
 .DS_Store
 Thumbs.db
-.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.venv/
+.env/
+
+# Django
+*.log
+db.sqlite3
+*.sqlite3
+staticfiles/
+.migrations/
+
 .env.*

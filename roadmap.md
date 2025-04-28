@@ -19,15 +19,16 @@ This document outlines the sequential steps to implement a quantifiable performa
 
 ## 2. Backend API Implementation
 
-1. Scaffold Django project & app:
-   - `django-admin startproject backend`
-   - `cd backend && python manage.py startapp api`
-2. Implement API views in `api/views.py` returning mock JSON data:
-   - `GET /items/`, `GET /items/<id>/`
-   - `POST /items/`, `PUT /items/<id>/`, `DELETE /items/<id>/`
-3. No database setup; use hardcoded/mock responses in views.
-4. Configure URL routes in `backend/urls.py` and `api/urls.py`.
-5. Document run instructions in `/backend/README.md`: install dependencies & `python manage.py runserver`.
+- [x] Scaffold Django project & app (`backend`, `api`)
+- [x] Implement GET and POST endpoints for 10 resources, returning mock data
+- [x] No database setup; uses in-memory lists
+- [x] Configure URL routes in `backend/urls.py` and `api/urls.py`
+- [x] Document run instructions in `/backend/README.md`
+- [x] Add `requirements.txt` for backend dependencies
+- [x] Add Python/Django ignores to root `.gitignore`
+- [x] Initial integration tests for backend endpoints (created and tested)
+
+**The backend is now fully scaffolded and ready for frontend integration and benchmarking.**
 
 ## 3. Frontend Page Creation
 
