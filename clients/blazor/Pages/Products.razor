@@ -1,0 +1,21 @@
+@page "/products"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+
+<h3>Products List</h3>
+<RadzenDataGrid Data="products" TItem="BlazorClient.Product" AllowPaging="true" AllowSorting="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="BlazorClient.Product" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.Product" Property="Name" Title="Name" />
+        <RadzenDataGridColumn TItem="BlazorClient.Product" Property="Description" Title="Description" />
+        <RadzenDataGridColumn TItem="BlazorClient.Product" Property="Price" Title="Price" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<BlazorClient.Product> products;
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Api.GetProductsAsync();
+    }
+}

@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Components.Routing
+@using Radzen
+
+@* Ensure Radzen components are recognized *@
+@using Radzen.Blazor
+
+<RadzenSidebar Style="width: 220px; height: 100vh; position: fixed;">
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem Text="Products" Path="/products" Icon="inventory_2" />
+        <RadzenPanelMenuItem Text="Orders" Path="/orders" Icon="shopping_cart" />
+        <RadzenPanelMenuItem Text="Inventory" Path="/inventory" Icon="warehouse" />
+        <RadzenPanelMenuItem Text="Customers" Path="/customers" Icon="people" />
+        <RadzenPanelMenuItem Text="Suppliers" Path="/add-supplier" Icon="local_shipping" />
+        <RadzenPanelMenuItem Text="Invoices" Path="/add-invoice" Icon="receipt_long" />
+        <RadzenPanelMenuItem Text="Payments" Path="/add-payment" Icon="credit_card" />
+        <RadzenPanelMenuItem Text="Tickets" Path="/create-ticket" Icon="confirmation_number" />
+        <RadzenPanelMenuItem Text="Notifications" Path="/new-notification" Icon="notifications" />
+        <RadzenPanelMenuItem Text="Users" Path="/users" Icon="person" />
+    </RadzenPanelMenu>
+</RadzenSidebar>

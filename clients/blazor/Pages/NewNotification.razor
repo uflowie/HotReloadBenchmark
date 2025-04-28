@@ -1,0 +1,39 @@
+@page "/new-notification"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+@inject Radzen.NotificationService NotificationService
+
+<h3>New Notification</h3>
+<RadzenTemplateForm Data="notificationModel" TItem="BlazorClient.Notification" Submit="OnSubmit">
+    <RadzenFieldset Text="Notification Details">
+        <RadzenLabel Text="User" />
+        <RadzenDropDown Data="users" @bind-Value="notificationModel.UserId" TextProperty="Name" ValueProperty="Id" Name="User" Style="width: 100%" />
+        <RadzenRequiredValidator Component="User" Text="User is required" />
+        <br />
+        <RadzenLabel Text="Message" />
+        <RadzenTextArea @bind-Value="notificationModel.Message" Name="Message" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Message" Text="Message is required" />
+        <br />
+        <RadzenLabel Text="Date" />
+        <RadzenDatePicker @bind-Value="notificationModel.Date" Name="Date" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Date" Text="Date is required" />
+    </RadzenFieldset>
+    <RadzenButton Text="Add Notification" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />
+</RadzenTemplateForm>
+
+@code {
+    private BlazorClient.Notification notificationModel = new() { Date = DateTime.Now.ToString("yyyy-MM-dd") };
+    private List<BlazorClient.User> users = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Api.GetUsersAsync();
+    }
+
+    private async Task OnSubmit(BlazorClient.Notification _)
+    {
+        await Api.CreateNotificationAsync(notificationModel);
+        NotificationService.Notify(Radzen.NotificationSeverity.Success, "Notification sent", "The notification was successfully sent.");
+        notificationModel = new() { Date = DateTime.Now.ToString("yyyy-MM-dd") };
+    }
+}

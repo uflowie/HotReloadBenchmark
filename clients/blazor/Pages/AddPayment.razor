@@ -1,0 +1,40 @@
+@page "/add-payment"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+@inject Radzen.NotificationService NotificationService
+
+<h3>Add Payment</h3>
+<RadzenTemplateForm Data="payment" TItem="BlazorClient.Payment" Submit="OnSubmit">
+    <RadzenFieldset Text="Payment Details">
+        <RadzenLabel Text="Invoice" />
+        <RadzenDropDown Data="invoices" @bind-Value="payment.InvoiceId" TextProperty="Id" ValueProperty="Id" Name="Invoice" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Invoice" Text="Invoice is required" />
+        <br />
+        <RadzenLabel Text="Amount" />
+        <RadzenNumeric @bind-Value="payment.Amount" Name="Amount" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Amount" Text="Amount is required" />
+        <br />
+        <RadzenLabel Text="Method" />
+        <RadzenDropDown Data="methods" @bind-Value="payment.Method" Name="Method" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Method" Text="Method is required" />
+    </RadzenFieldset>
+    <RadzenButton Text="Add Payment" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />
+</RadzenTemplateForm>
+
+@code {
+    private BlazorClient.Payment payment = new();
+    private List<BlazorClient.Invoice> invoices = new();
+    private List<string> methods = new() { "Credit Card", "PayPal", "Bank Transfer" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        invoices = await Api.GetInvoicesAsync();
+    }
+
+    private async Task OnSubmit(BlazorClient.Payment _)
+    {
+        await Api.CreatePaymentAsync(payment);
+        NotificationService.Notify(Radzen.NotificationSeverity.Success, "Payment added", "The payment was successfully created.");
+        payment = new();
+    }
+}

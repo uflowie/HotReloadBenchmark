@@ -1,0 +1,29 @@
+@page "/add-supplier"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+@inject Radzen.NotificationService NotificationService
+
+<h3>Add Supplier</h3>
+<RadzenTemplateForm Data="supplier" TItem="BlazorClient.Supplier" Submit="OnSubmit">
+    <RadzenFieldset Text="Supplier Details">
+        <RadzenLabel Text="Name" />
+        <RadzenTextBox @bind-Value="supplier.Name" Name="Name" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Name" Text="Name is required" />
+        <br />
+        <RadzenLabel Text="Contact (Email)" />
+        <RadzenTextBox @bind-Value="supplier.Contact" Name="Contact" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Contact" Text="Contact is required" />
+    </RadzenFieldset>
+    <RadzenButton Text="Add Supplier" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />
+</RadzenTemplateForm>
+
+@code {
+    private BlazorClient.Supplier supplier = new();
+
+    private async Task OnSubmit(BlazorClient.Supplier _)
+    {
+        await Api.CreateSupplierAsync(supplier);
+        NotificationService.Notify(Radzen.NotificationSeverity.Success, "Supplier added", "The supplier was successfully created.");
+        supplier = new(); // Reset form
+    }
+}

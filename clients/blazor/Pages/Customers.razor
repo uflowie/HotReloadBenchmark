@@ -1,0 +1,20 @@
+@page "/customers"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+
+<h3>Customers List</h3>
+<RadzenDataGrid Data="customers" TItem="BlazorClient.Customer" AllowPaging="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="BlazorClient.Customer" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.Customer" Property="Name" Title="Name" />
+        <RadzenDataGridColumn TItem="BlazorClient.Customer" Property="Email" Title="Email" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<BlazorClient.Customer> customers;
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await Api.GetCustomersAsync();
+    }
+}

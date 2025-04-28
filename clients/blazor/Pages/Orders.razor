@@ -1,0 +1,21 @@
+@page "/orders"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+
+<h3>Orders List</h3>
+<RadzenDataGrid Data="orders" TItem="BlazorClient.Order" AllowPaging="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.Order" Property="ProductId" Title="Product ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Quantity" Title="Quantity" />
+        <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Total" Title="Total" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<BlazorClient.Order> orders;
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await Api.GetOrdersAsync();
+    }
+}

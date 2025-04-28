@@ -1,0 +1,39 @@
+@page "/add-invoice"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+@inject Radzen.NotificationService NotificationService
+
+<h3>Add Invoice</h3>
+<RadzenTemplateForm Data="invoice" TItem="BlazorClient.Invoice" Submit="OnSubmit">
+    <RadzenFieldset Text="Invoice Details">
+        <RadzenLabel Text="Order" />
+        <RadzenDropDown Data="orders" @bind-Value="invoice.OrderId" TextProperty="Id" ValueProperty="Id" Name="Order" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Order" Text="Order is required" />
+        <br />
+        <RadzenLabel Text="Amount" />
+        <RadzenNumeric @bind-Value="invoice.Amount" Name="Amount" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Amount" Text="Amount is required" />
+        <br />
+        <RadzenLabel Text="Date" />
+        <RadzenDatePicker @bind-Value="invoice.Date" Name="Date" Style="width: 100%" />
+        <RadzenRequiredValidator Component="Date" Text="Date is required" />
+    </RadzenFieldset>
+    <RadzenButton Text="Add Invoice" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />
+</RadzenTemplateForm>
+
+@code {
+    private BlazorClient.Invoice invoice = new();
+    private List<BlazorClient.Order> orders = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await Api.GetOrdersAsync();
+    }
+
+    private async Task OnSubmit(BlazorClient.Invoice _)
+    {
+        await Api.CreateInvoiceAsync(invoice);
+        NotificationService.Notify(Radzen.NotificationSeverity.Success, "Invoice added", "The invoice was successfully created.");
+        invoice = new();
+    }
+}

@@ -1,0 +1,20 @@
+@page "/inventory"
+@using Radzen
+@inject BlazorClient.ApiClient Api
+
+<h3>Inventory List</h3>
+<RadzenDataGrid Data="inventory" TItem="BlazorClient.InventoryItem" AllowPaging="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="BlazorClient.InventoryItem" Property="Id" Title="ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.InventoryItem" Property="ProductId" Title="Product ID" />
+        <RadzenDataGridColumn TItem="BlazorClient.InventoryItem" Property="Stock" Title="Stock" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<BlazorClient.InventoryItem> inventory;
+    protected override async Task OnInitializedAsync()
+    {
+        inventory = await Api.GetInventoryAsync();
+    }
+}
