@@ -1,5 +1,5 @@
 import { Component, ViewChild, inject } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { FilterTableDataSource } from './filter-table-data-source';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ApiService } from '../services/api.service';
@@ -21,30 +21,47 @@ import { MatCardModule } from '@angular/material/card';
     <app-side-nav>
       <mat-card style="margin: 24px auto; max-width: 900px;">
         <h2>Orders List</h2>
-    <mat-form-field appearance="fill" style="width: 100%; max-width: 300px;">
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Filter orders">
-    </mat-form-field>
+
     <div *ngIf="dataSource">
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
         <!-- ID Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            ID
+            <mat-form-field style="width: 100px; margin-bottom: 0;">
+              <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('id', $any($event.target).value)">
+            </mat-form-field>
+          </th>
           <td mat-cell *matCellDef="let order">{{order.id}}</td>
         </ng-container>
         <!-- Product ID Column -->
         <ng-container matColumnDef="productId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Product ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Product ID
+            <mat-form-field style="width: 100px; margin-bottom: 0;">
+              <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('productId', $any($event.target).value)">
+            </mat-form-field>
+          </th>
           <td mat-cell *matCellDef="let order">{{order.productId}}</td>
         </ng-container>
         <!-- Quantity Column -->
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Quantity
+            <mat-form-field style="width: 100px; margin-bottom: 0;">
+              <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('quantity', $any($event.target).value)">
+            </mat-form-field>
+          </th>
           <td mat-cell *matCellDef="let order">{{order.quantity}}</td>
         </ng-container>
         <!-- Total Column -->
         <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Total
+            <mat-form-field style="width: 100px; margin-bottom: 0;">
+              <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('total', $any($event.target).value)">
+            </mat-form-field>
+          </th>
           <td mat-cell *matCellDef="let order">{{order.total | currency}}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -60,26 +77,17 @@ import { MatCardModule } from '@angular/material/card';
 export class OrdersListComponent {
   apiService = inject(ApiService);
   displayedColumns: string[] = ['id', 'productId', 'quantity', 'total'];
-  dataSource: MatTableDataSource<Order> | null = null;
+  dataSource = new FilterTableDataSource<Order>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit() {
     this.apiService.getOrders().subscribe(orders => {
-      this.dataSource = new MatTableDataSource(orders);
+      this.dataSource.data = orders;
       setTimeout(() => {
-        if (this.dataSource) {
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        }
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     });
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    if (this.dataSource) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
   }
 }
