@@ -8,16 +8,16 @@ This document provides detailed specifications for each frontend page.
    - Features: Pagination, filtering, and sorting
 2. Products List (`GET /products/`)
    - Display: ID, Name, Description, Price
-   - Features: Pagination and sorting
+   - Features: Pagination, filtering, and sorting
 3. Orders List (`GET /orders/`)
    - Display: ID, Product ID, Quantity, Total
-   - Features: Pagination
+   - Features: Pagination, filtering, and sorting
 4. Inventory List (`GET /inventory/`)
    - Display: ID, Product ID, Stock
-   - Features: Pagination
+   - Features: Pagination, filtering, and sorting
 5. Customers List (`GET /customers/`)
    - Display: ID, Name, Email
-   - Features: Pagination
+   - Features: Pagination, filtering, and sorting
 
 ## Form Pages
 6. Add Supplier (`POST /suppliers/`)

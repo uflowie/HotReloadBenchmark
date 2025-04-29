@@ -3,7 +3,7 @@
 @inject BlazorClient.ApiClient Api
 
 <h3>Orders List</h3>
-<RadzenDataGrid Data="orders" TItem="BlazorClient.Order" AllowPaging="true">
+<RadzenDataGrid Data="orders" TItem="BlazorClient.Order" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
     <Columns>
         <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Id" Title="ID" />
         <RadzenDataGridColumn TItem="BlazorClient.Order" Property="ProductId" Title="Product ID" />
