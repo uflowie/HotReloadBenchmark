@@ -1,40 +1,102 @@
+import random
+from datetime import datetime, timedelta
+
+NUM_ITEMS = 50
+
+today = datetime.now()
+
+# Users
 USERS = [
-    {"id": 1, "name": "Alice", "email": "alice@example.com"},
-    {"id": 2, "name": "Bob", "email": "bob@example.com"}
+    {"id": i, "name": f"User {i}", "email": f"user{i}@example.com"}
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Products
 PRODUCTS = [
-    {"id": 1, "name": "Widget", "description": "A useful widget", "price": 9.99},
-    {"id": 2, "name": "Gadget", "description": "A fancy gadget", "price": 19.99}
+    {
+        "id": i,
+        "name": f"Product {i}",
+        "description": f"Description for product {i}",
+        "price": round(5 + i * 1.5, 2)
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Orders
 ORDERS = [
-    {"id": 1, "productId": 1, "quantity": 2, "total": 19.98},
-    {"id": 2, "productId": 2, "quantity": 1, "total": 19.99}
+    {
+        "id": i,
+        "productId": random.randint(1, NUM_ITEMS),
+        "quantity": random.randint(1, 5),
+        "total": round(random.randint(1, 5) * random.uniform(5.0, 100.0), 2)
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Inventory
 INVENTORY = [
-    {"id": 1, "productId": 1, "stock": 100},
-    {"id": 2, "productId": 2, "stock": 50}
+    {
+        "id": i,
+        "productId": i,
+        "stock": random.randint(0, 200)
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Customers
 CUSTOMERS = [
-    {"id": 1, "name": "Charlie", "email": "charlie@example.com"},
-    {"id": 2, "name": "Dana", "email": "dana@example.com"}
+    {"id": i, "name": f"Customer {i}", "email": f"customer{i}@example.com"}
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Suppliers
 SUPPLIERS = [
-    {"id": 1, "name": "Acme Corp", "contact": "acme@example.com"},
-    {"id": 2, "name": "Globex Inc", "contact": "globex@example.com"}
+    {"id": i, "name": f"Supplier {i}", "contact": f"supplier{i}@example.com"}
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Invoices
 INVOICES = [
-    {"id": 1, "orderId": 1, "amount": 19.98, "date": "2023-01-01"},
-    {"id": 2, "orderId": 2, "amount": 19.99, "date": "2023-01-02"}
+    {
+        "id": i,
+        "orderId": random.randint(1, NUM_ITEMS),
+        "amount": round(random.uniform(10.0, 1000.0), 2),
+        "date": (today - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d")
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Payments
+METHODS = ["Credit Card", "PayPal", "Bank Transfer"]
 PAYMENTS = [
-    {"id": 1, "invoiceId": 1, "amount": 19.98, "method": "Credit Card"},
-    {"id": 2, "invoiceId": 2, "amount": 19.99, "method": "PayPal"}
+    {
+        "id": i,
+        "invoiceId": random.randint(1, NUM_ITEMS),
+        "amount": round(random.uniform(10.0, 1000.0), 2),
+        "method": random.choice(METHODS)
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Tickets
+STATUSES = ["open", "closed", "pending"]
 TICKETS = [
-    {"id": 1, "customerId": 1, "issue": "Cannot login", "status": "open"},
-    {"id": 2, "customerId": 2, "issue": "Order not received", "status": "closed"}
+    {
+        "id": i,
+        "customerId": random.randint(1, NUM_ITEMS),
+        "issue": f"Issue description {i}",
+        "status": random.choice(STATUSES)
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
+
+# Notifications
 NOTIFICATIONS = [
-    {"id": 1, "userId": 1, "message": "Welcome!", "date": "2023-01-01"},
-    {"id": 2, "userId": 2, "message": "Your order shipped", "date": "2023-01-02"}
+    {
+        "id": i,
+        "userId": random.randint(1, NUM_ITEMS),
+        "message": f"Notification {i}",
+        "date": (today - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d")
+    }
+    for i in range(1, NUM_ITEMS + 1)
 ]
