@@ -40,3 +40,6 @@ This document provides detailed specifications for each frontend page.
 - Home (`/`): Simple hello world page
 
 *This plan is now synchronized with the actual implementation as of April 29, 2025.*
+
+## Layout Requirement
+- The app should include a navigation menu (NavMenu) at the top, allowing users to navigate to all pages listed in this plan. This menu should be part of the main layout and visible on all pages.
