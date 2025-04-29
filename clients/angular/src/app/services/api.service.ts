@@ -24,91 +24,91 @@ export class ApiService {
 
   // Users
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
+    return this.http.get<User[]>(`${this.apiUrl}/users/`);
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/users`, user);
+    return this.http.post<User>(`${this.apiUrl}/users/`, user);
   }
 
   // Products
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/products`);
+    return this.http.get<Product[]>(`${this.apiUrl}/products/`);
   }
 
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/products`, product);
+    return this.http.post<Product>(`${this.apiUrl}/products/`, product);
   }
 
   // Orders
   getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/orders`);
+    return this.http.get<Order[]>(`${this.apiUrl}/orders/`);
   }
 
   createOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.apiUrl}/orders`, order);
+    return this.http.post<Order>(`${this.apiUrl}/orders/`, order);
   }
 
   // Inventory
   getInventoryItems(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>(`${this.apiUrl}/inventory`);
+    return this.http.get<InventoryItem[]>(`${this.apiUrl}/inventory/`);
   }
 
   createInventoryItem(item: InventoryItem): Observable<InventoryItem> {
-    return this.http.post<InventoryItem>(`${this.apiUrl}/inventory`, item);
+    return this.http.post<InventoryItem>(`${this.apiUrl}/inventory/`, item);
   }
 
   // Customers
   getCustomers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(`${this.apiUrl}/customers`);
+    return this.http.get<Customer[]>(`${this.apiUrl}/customers/`);
   }
 
   createCustomer(customer: Customer): Observable<Customer> {
-    return this.http.post<Customer>(`${this.apiUrl}/customers`, customer);
+    return this.http.post<Customer>(`${this.apiUrl}/customers/`, customer);
   }
 
   // Suppliers
   getSuppliers(): Observable<Supplier[]> {
-    return this.http.get<Supplier[]>(`${this.apiUrl}/suppliers`);
+    return this.http.get<Supplier[]>(`${this.apiUrl}/suppliers/`);
   }
 
   createSupplier(supplier: Supplier): Observable<Supplier> {
-    return this.http.post<Supplier>(`${this.apiUrl}/suppliers`, supplier);
+    return this.http.post<Supplier>(`${this.apiUrl}/suppliers/`, supplier);
   }
 
   // Invoices
   getInvoices(): Observable<Invoice[]> {
-    return this.http.get<Invoice[]>(`${this.apiUrl}/invoices`);
+    return this.http.get<Invoice[]>(`${this.apiUrl}/invoices/`);
   }
 
   createInvoice(invoice: Invoice): Observable<Invoice> {
-    return this.http.post<Invoice>(`${this.apiUrl}/invoices`, invoice);
+    return this.http.post<Invoice>(`${this.apiUrl}/invoices/`, invoice);
   }
 
   // Payments
   getPayments(): Observable<Payment[]> {
-    return this.http.get<Payment[]>(`${this.apiUrl}/payments`);
+    return this.http.get<Payment[]>(`${this.apiUrl}/payments/`);
   }
 
   createPayment(payment: Payment): Observable<Payment> {
-    return this.http.post<Payment>(`${this.apiUrl}/payments`, payment);
+    return this.http.post<Payment>(`${this.apiUrl}/payments/`, payment);
   }
 
   // Tickets
   getTickets(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(`${this.apiUrl}/tickets`);
+    return this.http.get<Ticket[]>(`${this.apiUrl}/tickets/`);
   }
 
   createTicket(ticket: Ticket): Observable<Ticket> {
-    return this.http.post<Ticket>(`${this.apiUrl}/tickets`, ticket);
+    return this.http.post<Ticket>(`${this.apiUrl}/tickets/`, ticket);
   }
 
   // Notifications
   getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(`${this.apiUrl}/notifications`);
+    return this.http.get<Notification[]>(`${this.apiUrl}/notifications/`);
   }
 
   createNotification(notification: Notification): Observable<Notification> {
-    return this.http.post<Notification>(`${this.apiUrl}/notifications`, notification);
+    return this.http.post<Notification>(`${this.apiUrl}/notifications/`, notification);
   }
 }
