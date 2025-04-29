@@ -22,7 +22,7 @@
 </RadzenTemplateForm>
 
 @code {
-    private BlazorClient.Invoice invoice = new();
+    private BlazorClient.Invoice invoice = new BlazorClient.Invoice { Date = DateTime.Now };
     private List<BlazorClient.Order> orders = new();
 
     protected override async Task OnInitializedAsync()

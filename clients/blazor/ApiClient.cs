@@ -135,7 +135,7 @@ namespace BlazorClient
         public int Id { get; set; }
         public int OrderId { get; set; }
         public decimal Amount { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
     }
     public class Payment
     {
@@ -156,6 +156,6 @@ namespace BlazorClient
         public int Id { get; set; }
         public int UserId { get; set; }
         public string Message { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

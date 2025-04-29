@@ -22,7 +22,7 @@
 </RadzenTemplateForm>
 
 @code {
-    private BlazorClient.Notification notificationModel = new() { Date = DateTime.Now.ToString("yyyy-MM-dd") };
+    private BlazorClient.Notification notificationModel = new() { Date = DateTime.Now };
     private List<BlazorClient.User> users = new();
 
     protected override async Task OnInitializedAsync()
@@ -34,6 +34,6 @@
     {
         await Api.CreateNotificationAsync(notificationModel);
         NotificationService.Notify(Radzen.NotificationSeverity.Success, "Notification sent", "The notification was successfully sent.");
-        notificationModel = new() { Date = DateTime.Now.ToString("yyyy-MM-dd") };
+        notificationModel = new() { Date = DateTime.Now };
     }
 }
