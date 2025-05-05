@@ -28,7 +28,7 @@ const { spawn } = require('child_process');
   await waitOn({ resources: [url], timeout: 60000 });
 
   // Launch Playwright browser
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto(url);
@@ -37,16 +37,18 @@ const { spawn } = require('child_process');
   const scenarios = [
     {
       filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
-      search: '<h1>Users List</h1>',
-      replaceWith: '<h1>All Users</h1>',
-      selector: 'h1',
+      search: '<h2>Users List</h2>',
+      replaceWith: '<h2>All Users</h2>',
+      selector: 'h2',
       expectedText: 'All Users',
+      url: 'http://localhost:4200/users',
     },
     // TODO: add more scenario definitions matching page-plan-edits.md entries
   ];
 
   for (const [idx, s] of scenarios.entries()) {
     console.log(`Running scenario ${idx + 1}`);
+    await page.goto(s.url);
     const original = fs.readFileSync(s.filePath, 'utf8');
     const patched = original.replace(s.search, s.replaceWith);
     fs.writeFileSync(s.filePath, patched, 'utf8');
@@ -54,17 +56,22 @@ const { spawn } = require('child_process');
     const start = Date.now();
     try {
       await page.waitForFunction(
-        (sel, text) => document.querySelector(sel)?.textContent.includes(text),
-        {},
-        s.selector,
-        s.expectedText,
-        { timeout: 30000 }
+        // 1️⃣ pageFunction
+        ({ sel, text }) =>
+          document.querySelector(sel)?.textContent.includes(text),
+
+        // 2️⃣ arg: everything the pageFunction needs
+        { sel: s.selector, text: s.expectedText },
+
+        // 3️⃣ options
+        { timeout: 10_000 }
       );
-      const duration = Date.now() - start;
-      console.log(`Scenario ${idx + 1} reload time: ${duration}ms`);
+
+      console.log(`Scenario ${idx + 1} reload time: ${Date.now() - start} ms`);
     } catch (e) {
       console.error(`Scenario ${idx + 1} failed:`, e);
     }
+
 
     // Revert file
     fs.writeFileSync(s.filePath, original, 'utf8');
