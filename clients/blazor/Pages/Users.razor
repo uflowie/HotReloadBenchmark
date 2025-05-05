@@ -1,7 +1,7 @@
 @page "/users"
 @inject BlazorClient.ApiClient Api
 
-<h3>Users List</h3>
+<h2>Users List</h2>
 <RadzenDataGrid Data="users" TItem="BlazorClient.User" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
     <Columns>
         <RadzenDataGridColumn TItem="BlazorClient.User" Property="Id" Title="ID" />
