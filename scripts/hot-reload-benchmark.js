@@ -26,8 +26,20 @@ const { spawn } = require('child_process');
   // Select framework from command line (default: angular)
   const framework = process.argv[2] === 'blazor' ? 'blazor' : 'angular';
   const runCount = parseInt(process.argv[3], 10) || 5;
-  const scenarios = require(`./scenarios.${framework}.js`);
-  console.log(`Running benchmark for framework: ${framework} (${runCount} runs per scenario)`);
+  const scenarioIdxRaw = process.argv[4];
+  const scenariosAll = require(`./scenarios.${framework}.js`);
+  let scenarios;
+  if (scenarioIdxRaw !== undefined) {
+    const idx = parseInt(scenarioIdxRaw, 10);
+    if (isNaN(idx) || idx < 0 || idx >= scenariosAll.length) {
+      throw new Error(`Invalid scenario index: ${scenarioIdxRaw}`);
+    }
+    scenarios = [scenariosAll[idx]];
+    console.log(`Running ONLY scenario ${idx + 1} for framework: ${framework} (${runCount} runs)`);
+  } else {
+    scenarios = scenariosAll;
+    console.log(`Running benchmark for framework: ${framework} (${runCount} runs per scenario)`);
+  }
 
   // Framework dev server config
   const devServerConfig = {
