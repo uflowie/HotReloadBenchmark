@@ -1,4 +1,3 @@
-
 # Visual Studio / .NET / Blazor specific
 .vs/
 bin/
@@ -51,6 +50,9 @@ testem.log
 /Angular/typings
 /Angular/.env
 /Angular/.env.*
+
+# Node modules in any folder
+**/node_modules/
 
 # IDEs and editors
 /.idea

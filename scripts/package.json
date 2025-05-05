@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "playwright": "^1.52.0",
+    "wait-on": "^8.0.3"
+  }
+}
