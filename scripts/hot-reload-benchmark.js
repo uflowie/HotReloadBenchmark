@@ -19,14 +19,15 @@ const { spawn } = require('child_process');
   // Prepare for results
   const results = [];
   const date = new Date();
-  const timestamp = date.toISOString().replace(/[:.]/g, '-').slice(0,19);
+  const timestamp = date.toISOString().replace(/[:.]/g, '-').slice(0, 19);
   const resultsDir = path.join(__dirname, 'benchmark-results');
   if (!fs.existsSync(resultsDir)) fs.mkdirSync(resultsDir);
   const resultsFile = path.join(resultsDir, `benchmark-results-${timestamp}.txt`);
-    // Select framework from command line (default: angular)
+  // Select framework from command line (default: angular)
   const framework = process.argv[2] === 'blazor' ? 'blazor' : 'angular';
+  const runCount = parseInt(process.argv[3], 10) || 5;
   const scenarios = require(`./scenarios.${framework}.js`);
-  console.log(`Running benchmark for framework: ${framework}`);
+  console.log(`Running benchmark for framework: ${framework} (${runCount} runs per scenario)`);
 
   // Framework dev server config
   const devServerConfig = {
@@ -74,37 +75,45 @@ const { spawn } = require('child_process');
 
     const original = fs.readFileSync(s.filePath, 'utf8');
     const patched = original.replace(s.search, s.replaceWith);
-    fs.writeFileSync(s.filePath, patched, 'utf8');
 
-    const start = Date.now();
-    try {
-      await page.waitForFunction(
-        // 1️⃣ pageFunction
-        ({ sel, text }) =>
-          document.querySelector(sel)?.textContent.includes(text),
-
-        // 2️⃣ arg: everything the pageFunction needs
-        { sel: s.selector, text: s.expectedText },
-
-        // 3️⃣ options
-        { timeout: 10_000 }
-      );
-
-      const duration = Date.now() - start;
-      const resultLine = `Scenario ${idx + 1} (${s.url}, ${s.selector}, '${s.expectedText}'): ${duration} ms`;
-      console.log(resultLine);
-      results.push(resultLine);
-    } catch (e) {
-      const errorLine = `Scenario ${idx + 1} failed: ${e}`;
-      console.error(errorLine);
-      results.push(errorLine);
+    const times = [];
+    let failed = false;
+    for (let run = 0; run < runCount; run++) {
+      fs.writeFileSync(s.filePath, patched, 'utf8');
+      const start = Date.now();
+      try {
+        await page.waitForFunction(
+          ({ sel, text }) =>
+            document.querySelector(sel)?.textContent.includes(text),
+          { sel: s.selector, text: s.expectedText },
+          { timeout: 10_000 }
+        );
+        const duration = Date.now() - start;
+        times.push(duration);
+        console.log(`  Run ${run + 1}: ${duration} ms`);
+      } catch (e) {
+        console.error(`  Run ${run + 1} failed: ${e}`);
+        times.push(Number.POSITIVE_INFINITY); // Mark as failed
+        failed = true;
+      }
+      // Revert file after each run
+      fs.writeFileSync(s.filePath, original, 'utf8');
+      // Give time for hot reload to process revert
+      await new Promise((r) => setTimeout(r, 2000));
     }
-
-
-    // Revert file
-    fs.writeFileSync(s.filePath, original, 'utf8');
-    // Small pause for HMR to revert
-    await new Promise((r) => setTimeout(r, 500));
+    // Calculate median (ignoring failed runs if possible)
+    const validTimes = times.filter(t => isFinite(t));
+    let median;
+    if (validTimes.length > 0) {
+      validTimes.sort((a, b) => a - b);
+      const mid = Math.floor(validTimes.length / 2);
+      median = validTimes.length % 2 !== 0 ? validTimes[mid] : (validTimes[mid - 1] + validTimes[mid]) / 2;
+    } else {
+      median = 'FAILED';
+    }
+    const resultLine = `Scenario ${idx + 1} (${s.url}, ${s.selector}, '${s.expectedText}'): median ${median} ms`;
+    console.log(resultLine);
+    results.push(resultLine);
   }
 
   await browser.close();
