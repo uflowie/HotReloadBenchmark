@@ -16,14 +16,47 @@ const waitOn = require('wait-on');
 const { spawn } = require('child_process');
 
 (async () => {
-  // Spawn Angular dev server with HMR (adjust for other frameworks as needed)
-  const devServer = spawn('npx', ['ng', 'serve'], {
-    cwd: path.resolve(__dirname, '../clients/angular'),
+  // Prepare for results
+  const results = [];
+  const date = new Date();
+  const timestamp = date.toISOString().replace(/[:.]/g, '-').slice(0,19);
+  const resultsDir = path.join(__dirname, 'benchmark-results');
+  if (!fs.existsSync(resultsDir)) fs.mkdirSync(resultsDir);
+  const resultsFile = path.join(resultsDir, `benchmark-results-${timestamp}.txt`);
+    // Select framework from command line (default: angular)
+  const framework = process.argv[2] === 'blazor' ? 'blazor' : 'angular';
+  const scenarios = require(`./scenarios.${framework}.js`);
+  console.log(`Running benchmark for framework: ${framework}`);
+
+  // Framework dev server config
+  const devServerConfig = {
+    angular: {
+      cmd: 'npx',
+      args: ['ng', 'serve'],
+      cwd: path.resolve(__dirname, '../clients/angular'),
+      url: 'http://localhost:4200',
+    },
+    blazor: {
+      cmd: 'dotnet',
+      args: ['watch', 'run'],
+      cwd: path.resolve(__dirname, '../clients/blazor'),
+      url: 'http://localhost:5000',
+    },
+    // Add more frameworks here as needed
+  };
+
+  if (!devServerConfig[framework]) {
+    throw new Error(`Unsupported framework: ${framework}`);
+  }
+
+  // Start the appropriate dev server
+  const { cmd, args, cwd, url } = devServerConfig[framework];
+  const devServer = spawn(cmd, args, {
+    cwd,
     shell: true,
     stdio: 'inherit',
   });
 
-  const url = 'http://localhost:4200';
   console.log(`Waiting for dev server at ${url}...`);
   await waitOn({ resources: [url], timeout: 60000 });
 
@@ -33,22 +66,12 @@ const { spawn } = require('child_process');
   const page = await context.newPage();
   await page.goto(url);
 
-  // Define edit scenarios
-  const scenarios = [
-    {
-      filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
-      search: '<h2>Users List</h2>',
-      replaceWith: '<h2>All Users</h2>',
-      selector: 'h2',
-      expectedText: 'All Users',
-      url: 'http://localhost:4200/users',
-    },
-    // TODO: add more scenario definitions matching page-plan-edits.md entries
-  ];
-
   for (const [idx, s] of scenarios.entries()) {
     console.log(`Running scenario ${idx + 1}`);
     await page.goto(s.url);
+    // sleep here because blazor doesn't hot reload properly otherwise
+    await new Promise((r) => setTimeout(r, 5000));
+
     const original = fs.readFileSync(s.filePath, 'utf8');
     const patched = original.replace(s.search, s.replaceWith);
     fs.writeFileSync(s.filePath, patched, 'utf8');
@@ -67,9 +90,14 @@ const { spawn } = require('child_process');
         { timeout: 10_000 }
       );
 
-      console.log(`Scenario ${idx + 1} reload time: ${Date.now() - start} ms`);
+      const duration = Date.now() - start;
+      const resultLine = `Scenario ${idx + 1} (${s.url}, ${s.selector}, '${s.expectedText}'): ${duration} ms`;
+      console.log(resultLine);
+      results.push(resultLine);
     } catch (e) {
-      console.error(`Scenario ${idx + 1} failed:`, e);
+      const errorLine = `Scenario ${idx + 1} failed: ${e}`;
+      console.error(errorLine);
+      results.push(errorLine);
     }
 
 
@@ -81,5 +109,7 @@ const { spawn } = require('child_process');
 
   await browser.close();
   devServer.kill();
-  console.log('Benchmark complete.');
+  // Write results to file
+  fs.writeFileSync(resultsFile, `Benchmark Results (${new Date().toISOString()})\n\n` + results.join('\n') + '\n', 'utf8');
+  console.log(`Benchmark complete. Results written to ${resultsFile}`);
 })();
