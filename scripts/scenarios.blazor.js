@@ -9,5 +9,13 @@ module.exports = [
     expectedText: 'All Users',
     url: 'http://localhost:5000/users',
   },
+  {
+    filePath: path.resolve(__dirname, '../clients/blazor/Pages/Products.razor'),
+    search: '<RadzenDataGridColumn TItem="BlazorClient.Product" Property="Price" Title="Price" />',
+    replaceWith: '<RadzenDataGridColumn TItem="BlazorClient.Product" Property="Price" Title="Price">$@context.Price</RadzenDataGridColumn>',
+    selector: 'td[data-property="Price"]',
+    expectedText: '$',
+    url: 'http://localhost:5000/products',
+  },
   // Add more Blazor scenarios here if needed
 ];

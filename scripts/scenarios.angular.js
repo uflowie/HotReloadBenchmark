@@ -9,5 +9,13 @@ module.exports = [
     expectedText: 'All Users',
     url: 'http://localhost:4200/users',
   },
+  {
+    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/products-list.component.ts'),
+    search: '{{product.price | currency}}',
+    replaceWith: "{{'€' + product.price}}",
+    selector: 'td.mat-column-price',
+    expectedText: '€',
+    url: 'http://localhost:4200/products',
+  },
   // Add more Angular scenarios here if needed
 ];
