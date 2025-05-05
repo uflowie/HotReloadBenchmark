@@ -52,7 +52,7 @@ export class NewNotificationComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   form: FormGroup = this.fb.group({
     userId: ['', Validators.required],
-    message: ['', Validators.required],
+    message: ['You have a new notification!', Validators.required],
     date: [new Date(), Validators.required]
   });
   users: User[] = [];

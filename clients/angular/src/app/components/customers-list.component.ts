@@ -46,8 +46,8 @@ import { MatCardModule } from '@angular/material/card';
         </ng-container>
         <!-- Email Column -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Email
+          <th id="email-header" mat-header-cell *matHeaderCellDef mat-sort-header>
+            Email_
             <mat-form-field style="width: 100px; margin-bottom: 0;">
               <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('email', $any($event.target).value)">
             </mat-form-field>

@@ -95,20 +95,57 @@ const { spawn } = require('child_process');
     const times = [];
     let failed = false;
     for (let run = 0; run < runCount; run++) {
+      // If scenario has preEval, run it before checking
+      if (s.preEval) {
+        if (typeof s.preEval === 'function') {
+          await s.preEval(page);
+        } else if (typeof s.preEval === 'string') {
+          await page.evaluate(s.preEval);
+        }
+      }
       fs.writeFileSync(s.filePath, patched, 'utf8');
+      // If scenario has postPatchEval, run it after patching
+      if (s.postPatchEval) {
+        if (typeof s.postPatchEval === 'function') {
+          await s.postPatchEval(page);
+        } else if (typeof s.postPatchEval === 'string') {
+          await page.evaluate(s.postPatchEval);
+        }
+      }
       const start = Date.now();
       try {
-        await page.waitForFunction(
-          ({ sel, text }) =>
-            document.querySelector(sel)?.textContent.includes(text),
-          { sel: s.selector, text: s.expectedText },
-          { timeout: 10_000 }
-        );
+        if (s.waitForFn) {
+          // Use custom waitForFunction provided by scenario
+          await page.waitForFunction(s.waitForFn.fn, s.waitForFn.args, { timeout: s.waitForFn.timeout || 10_000 });
+        } else {
+          await page.waitForFunction(
+            ({ sel, text }) => {
+              const el = document.querySelector(sel);
+              if (!el) {
+                window._hotReloadDebug = `Selector not found: ${sel}`;
+                return false;
+              }
+              if (!el.textContent.includes(text)) {
+                window._hotReloadDebug = `Selector '${sel}' found, but content is: '${el.textContent}' (expected to include '${text}')`;
+                return false;
+              }
+              window._hotReloadDebug = '';
+              return true;
+            },
+            { sel: s.selector, text: s.expectedText },
+            { timeout: 10_000 }
+          );
+        }
         const duration = Date.now() - start;
         times.push(duration);
         console.log(`  Run ${run + 1}: ${duration} ms`);
       } catch (e) {
         console.error(`  Run ${run + 1} failed: ${e}`);
+        // Print debug info from browser context
+        const debugMsg = await page.evaluate(() => window._hotReloadDebug);
+        if (debugMsg) {
+          console.error(`    Debug: ${debugMsg}`);
+        }
         times.push(Number.POSITIVE_INFINITY); // Mark as failed
         failed = true;
       }

@@ -21,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
         <mat-form-field appearance="fill" style="width: 100%; max-width: 400px;">
           <mat-label>Name</mat-label>
           <input matInput formControlName="name" required>
+          <!-- <mat-hint>Enter supplier name</mat-hint> -->
           <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill" style="width: 100%; max-width: 400px;">

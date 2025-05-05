@@ -36,6 +36,7 @@ import type { Invoice } from '../models/invoice.model';
       <mat-form-field appearance="fill" style="width: 100%; max-width: 400px;">
         <mat-label>Method</mat-label>
         <mat-select formControlName="method" required>
+          <!--PAYMENT_OPTIONS-->
           <mat-option value="credit_card">Credit Card</mat-option>
           <mat-option value="bank_transfer">Bank Transfer</mat-option>
           <mat-option value="cash">Cash</mat-option>
