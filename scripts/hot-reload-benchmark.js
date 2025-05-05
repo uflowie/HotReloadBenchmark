@@ -77,13 +77,17 @@ const { spawn } = require('child_process');
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
+
+  if (framework === 'blazor') {
+    // sleep here because blazor doesn't hot reload properly otherwise
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+
   await page.goto(url);
 
   for (const [idx, s] of scenarios.entries()) {
     console.log(`Running scenario ${idx + 1}`);
     await page.goto(s.url);
-    // sleep here because blazor doesn't hot reload properly otherwise
-    await new Promise((r) => setTimeout(r, 5000));
 
     const original = fs.readFileSync(s.filePath, 'utf8');
     const patched = original.replace(s.search, s.replaceWith);
