@@ -78,10 +78,10 @@ const { spawn } = require('child_process');
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  if (framework === 'blazor') {
-    // sleep here because blazor doesn't hot reload properly otherwise
-    await new Promise((r) => setTimeout(r, 5000));
-  }
+  // if (framework === 'blazor') {
+  //   // sleep here because blazor doesn't hot reload properly otherwise
+  //   await new Promise((r) => setTimeout(r, 5000));
+  // }
 
   await page.goto(url);
 
