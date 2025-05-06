@@ -139,5 +139,183 @@ module.exports = [
     },
     url: 'http://localhost:5000/',
   },
+  {
+    name: 'Scenario 11 (Users List: highlight admin users)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Users.razor'),
+        search: '<RadzenDataGridColumn TItem="BlazorClient.User" Property="Name" Title="Name" />',
+        replaceWith: `<RadzenDataGridColumn TItem="BlazorClient.User" Property="Name" Title="Name">
+  <Template Context="user">
+    @user.Name
+    @if (user.Email.EndsWith("@admin.com"))
+    {
+      <span class="admin-badge">Admin</span>
+    }
+  </Template>
+</RadzenDataGridColumn>`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Users.razor'),
+        search: '<!-- ADMIN_BADGE_STYLE -->',
+        replaceWith: `<style>
+.admin-badge { background: #007ACC; color: white; padding: 2px 4px; border-radius: 3px; }
+</style>`
+      }
+    ],
+    selector: 'span.admin-badge',
+    expectedText: 'Admin',
+    url: 'http://localhost:5000/users',
+  },
+  {
+    name: 'Scenario 12 (Orders List: add variant grids Qty & PID)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '</RadzenDataGrid>',
+        replaceWith: `</RadzenDataGrid>
+
+<!-- Variant: Qty header -->
+<RadzenDataGrid Data="orders" TItem="BlazorClient.Order" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
+  <Columns>
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Id" Title="ID" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="ProductId" Title="Product ID" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Quantity" Title="Qty" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Total" Title="Total" />
+  </Columns>
+</RadzenDataGrid>
+
+<!-- Variant: PID header -->
+<RadzenDataGrid Data="orders" TItem="BlazorClient.Order" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
+  <Columns>
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Id" Title="ID" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="ProductId" Title="PID" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Quantity" Title="Quantity" />
+    <RadzenDataGridColumn TItem="BlazorClient.Order" Property="Total" Title="Total" />
+  </Columns>
+</RadzenDataGrid>`
+      }
+    ],
+    waitForFn: {
+      fn: () => Array.from(document.querySelectorAll('.rz-column-title-content')).some(el => el.textContent.trim() === 'Qty'),
+      args: undefined,
+      timeout: 10000
+    },
+    url: 'http://localhost:5000/orders',
+  },
+  {
+    name: 'Scenario 13 (Orders List: add Actions column)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '@inject BlazorClient.ApiClient Api',
+        replaceWith: '@inject BlazorClient.ApiClient Api\n<!-- NAV_MANAGER_PLACEHOLDER -->'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '@code {',
+        replaceWith: '@code {\n    <!-- VIEW_ORDER_PLACEHOLDER -->'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '<RadzenDataGridColumn TItem="BlazorClient.Order" Property="Total" Title="Total" />',
+        replaceWith: `<RadzenDataGridColumn TItem="BlazorClient.Order" Property="Total" Title="Total" />
+  <RadzenDataGridColumn TItem="BlazorClient.Order" Title="Actions">
+    <Template Context="order">
+      <RadzenButton Text="View" Click="@((args) => ViewOrder(order.Id))" Style="margin-right: 4px" />
+    </Template>
+  </RadzenDataGridColumn>`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '<!-- NAV_MANAGER_PLACEHOLDER -->',
+        replaceWith: '@inject NavigationManager NavigationManager'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/Orders.razor'),
+        search: '<!-- VIEW_ORDER_PLACEHOLDER -->',
+        replaceWith: `private void ViewOrder(int id)
+    {
+        NavigationManager.NavigateTo($"/orders/{id}");
+    }`
+      }
+    ],
+    selector: 'button',
+    expectedText: 'View',
+    waitForFn: {
+      fn: () => Array.from(document.querySelectorAll('button')).some(el => el.textContent.trim() === 'View'),
+      args: undefined,
+      timeout: 10000
+    },
+    url: 'http://localhost:5000/orders',
+  },
+  {
+    name: 'Scenario 14 (Create Ticket Form: change Issue label, add placeholder, rename Submit button)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: '<RadzenLabel Text="Issue" />',
+        replaceWith: '<RadzenLabel Text="Description" />'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: '<RadzenTextArea @bind-Value="ticket.Issue" Name="Issue" Style="width: 100%" />',
+        replaceWith: '<RadzenTextArea @bind-Value="ticket.Issue" Name="Issue" Style="width: 100%" placeholder="Describe the issue here..." />'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: '<RadzenButton Text="Create Ticket" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />',
+        replaceWith: '<RadzenButton Text="Submit Ticket" ButtonType="ButtonType.Submit" Style="margin-top: 16px" />'
+      }
+    ],
+    selector: 'textarea[name="Issue"]',
+    expectedText: '',
+    waitForFn: {
+      fn: () => {
+        const el = document.querySelector('textarea[name="Issue"]');
+        const btn = document.querySelector('button[type="submit"]');
+        return el?.getAttribute('placeholder') === 'Describe the issue here...' && btn?.textContent.trim() === 'Submit Ticket';
+      },
+      args: undefined,
+      timeout: 10000
+    },
+    url: 'http://localhost:5000/create-ticket',
+  },
+  {
+    name: 'Scenario 15 (Create Ticket Form: add Priority dropdown)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: '<RadzenRequiredValidator Component="Issue" Text="Issue is required" />',
+        replaceWith: `<RadzenRequiredValidator Component="Issue" Text="Issue is required" />
+<RadzenLabel Text="Priority" />
+<RadzenDropDown Data="priorities" @bind-Value="ticket.Priority" Name="Priority" Style="width: 100%" />
+<RadzenRequiredValidator Component="Priority" Text="Priority is required" />`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: 'private List<BlazorClient.Customer> customers = new();',
+        replaceWith: `private List<BlazorClient.Customer> customers = new();
+private List<string> priorities = new() { "Low", "Medium", "High" };`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/blazor/Pages/CreateTicket.razor'),
+        search: 'customers = await Api.GetCustomersAsync();',
+        replaceWith: `customers = await Api.GetCustomersAsync();
+ticket.Priority = priorities[1];`
+      }
+    ],
+    selector: '.rz-dropdown-label',
+    expectedText: 'Medium',
+    waitForFn: {
+      fn: () => {
+        const labels = Array.from(document.querySelectorAll('.rz-dropdown-label'));
+        return labels[1]?.textContent.trim() === 'Medium';
+      },
+      args: undefined,
+      timeout: 10000
+    },
+    url: 'http://localhost:5000/create-ticket',
+  },
   // Add more Blazor scenarios here if needed
 ];

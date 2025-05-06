@@ -254,9 +254,19 @@ module.exports = [
         search: '<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>',
         replaceWith: `<ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Actions</th>
-    <td mat-cell *matCellDef="let order"><button>View</button></td>
+    <td mat-cell *matCellDef="let order"><button (click)="viewOrder(order.id)">View</button></td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/orders-list.component.ts'),
+        search: 'import { Component, ViewChild, inject } from \'@angular/core\';',
+        replaceWith: 'import { Component, ViewChild, inject } from \'@angular/core\';\nimport { Router } from \'@angular/router\';'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/orders-list.component.ts'),
+        search: '@ViewChild(MatSort) sort!: MatSort;',
+        replaceWith: '@ViewChild(MatSort) sort!: MatSort;\n  router = inject(Router);\n\n  viewOrder(id: number) {\n    this.router.navigate([`/orders/${id}`]);\n  }'
       }
     ],
     selector: 'button',
