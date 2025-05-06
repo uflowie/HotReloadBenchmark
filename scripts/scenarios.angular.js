@@ -2,49 +2,73 @@
 const path = require('path');
 module.exports = [
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
-    search: '<h2>Users List</h2>',
-    replaceWith: '<h2>All Users</h2>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
+        search: '<h2>Users List</h2>',
+        replaceWith: '<h2>All Users</h2>',
+      },
+    ],
     selector: 'h2',
     expectedText: 'All Users',
     url: 'http://localhost:4200/users',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/products-list.component.ts'),
-    search: '{{product.price | currency}}',
-    replaceWith: "{{'€' + product.price}}",
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/products-list.component.ts'),
+        search: '{{product.price | currency}}',
+        replaceWith: "{{'€' + product.price}}",
+      },
+    ],
     selector: 'td.mat-column-price',
     expectedText: '€',
     url: 'http://localhost:4200/products',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/inventory-list.component.ts'),
-    search: '<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>',
-    replaceWith: '<mat-paginator [pageSizeOptions]="[15, 20]" showFirstLastButtons></mat-paginator>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/inventory-list.component.ts'),
+        search: '<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>',
+        replaceWith: '<mat-paginator [pageSizeOptions]="[15, 20]" showFirstLastButtons></mat-paginator>',
+      },
+    ],
     selector: 'mat-paginator',
     expectedText: '15',
     url: 'http://localhost:4200/inventory',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/customers-list.component.ts'),
-    search: 'Email_',
-    replaceWith: 'Contact Email',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/customers-list.component.ts'),
+        search: 'Email_',
+        replaceWith: 'Contact Email',
+      },
+    ],
     selector: '#email-header',
     expectedText: 'Contact Email',
     url: 'http://localhost:4200/customers',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-supplier.component.ts'),
-    search: '<!-- <mat-hint>Enter supplier name</mat-hint> -->',
-    replaceWith: '<mat-hint>Enter supplier name</mat-hint>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-supplier.component.ts'),
+        search: '<!-- <mat-hint>Enter supplier name</mat-hint> -->',
+        replaceWith: '<mat-hint>Enter supplier name</mat-hint>',
+      },
+    ],
     selector: 'mat-hint',
     expectedText: 'Enter supplier name',
     url: 'http://localhost:4200/add-supplier',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-payment.component.ts'),
-    search: '<!--PAYMENT_OPTIONS-->',
-    replaceWith: '<mat-option value="paypal">PayPal</mat-option>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-payment.component.ts'),
+        search: '<!--PAYMENT_OPTIONS-->',
+        replaceWith: '<mat-option value="paypal">PayPal</mat-option>',
+      },
+    ],
     selector: 'mat-option[value="paypal"]',
     expectedText: 'PayPal',
     url: 'http://localhost:4200/add-payment',
@@ -57,7 +81,13 @@ module.exports = [
 
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: '<textarea matInput formControlName="issue" rows="4" required></textarea>',
+        replaceWith: '<textarea matInput formControlName="issue" rows="5" required></textarea>',
+      },
+    ],
     search: '<textarea matInput formControlName="issue" rows="4" required></textarea>',
     replaceWith: '<textarea matInput formControlName="issue" rows="5" required></textarea>',
     selector: 'textarea[formcontrolname=issue]',
@@ -70,9 +100,13 @@ module.exports = [
     }
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/new-notification.component.ts'),
-    search: "message: ['', Validators.required]",
-    replaceWith: "message: ['You have a new notification!', Validators.required]",
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/new-notification.component.ts'),
+        search: "message: ['', Validators.required]",
+        replaceWith: "message: ['You have a new notification!', Validators.required]",
+      },
+    ],
     selector: 'textarea',
     expectedText: 'You have a new notification!',
     url: 'http://localhost:4200/new-notification',
@@ -83,17 +117,25 @@ module.exports = [
     }
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/home.component.ts'),
-    search: '<h1>Hello World</h1>',
-    replaceWith: '<h1>Welcome to HotReload Benchmark!</h1>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/home.component.ts'),
+        search: '<h1>Hello World</h1>',
+        replaceWith: '<h1>Welcome to HotReload Benchmark!</h1>',
+      },
+    ],
     selector: 'h1',
     expectedText: 'Welcome to HotReload Benchmark!',
     url: 'http://localhost:4200/',
   },
   {
-    filePath: path.resolve(__dirname, '../clients/angular/src/app/components/side-nav.component.ts'),
-    search: '<mat-toolbar color="primary">Navigation</mat-toolbar>',
-    replaceWith: '<mat-toolbar color="primary" style="background: #007ACC;">Navigation</mat-toolbar>',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/side-nav.component.ts'),
+        search: '<mat-toolbar color="primary">Navigation</mat-toolbar>',
+        replaceWith: '<mat-toolbar color="primary" style="background: #007ACC;">Navigation</mat-toolbar>',
+      },
+    ],
     selector: 'mat-toolbar',
     expectedText: 'Navigation',
     url: 'http://localhost:4200/',
@@ -105,6 +147,23 @@ module.exports = [
       args: undefined,
       timeout: 10000
     }
+  },
+  {
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
+        search: '<h2>Users List</h2>',
+        replaceWith: `<h2>Users List</h2>\n<style>\n  .admin-badge {\n    background: #ffc107;\n    color: #222;\n    border-radius: 4px;\n    padding: 2px 6px;\n    font-size: 0.8em;\n    margin-left: 6px;\n    font-weight: 500;\n  }\n</style>`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
+        search: '{{user.name}}',
+        replaceWith: `{{user.name}} <span *ngIf=\"user.email.endsWith('@admin.com')\" class=\"admin-badge\">Admin</span>`
+      }
+    ],
+    selector: '.admin-badge',
+    expectedText: 'Admin',
+    url: 'http://localhost:4200/users',
   },
   // Add more Angular scenarios here if needed
 ];

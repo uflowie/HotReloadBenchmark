@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule, NgIf, SideNavComponent, MatCardModule],
   template: `
+
     <app-side-nav>
       <mat-card style="margin: 24px auto; max-width: 900px;">
         <h2>Users List</h2>
@@ -42,7 +43,9 @@ import { MatCardModule } from '@angular/material/card';
                 <input matInput placeholder="Filter" (keyup)="dataSource.setFilterValue('name', $any($event.target).value)">
               </mat-form-field>
             </th>
-            <td mat-cell *matCellDef="let user">{{user.name}}</td>
+            <td mat-cell *matCellDef="let user">
+  {{user.name}}
+</td>
           </ng-container>
           <!-- Email Column -->
           <ng-container matColumnDef="email">

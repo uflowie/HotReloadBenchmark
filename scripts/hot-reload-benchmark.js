@@ -89,8 +89,23 @@ const { spawn } = require('child_process');
     console.log(`Running scenario ${idx + 1}`);
     await page.goto(s.url);
 
-    const original = fs.readFileSync(s.filePath, 'utf8');
-    const patched = original.replace(s.search, s.replaceWith);
+    // Support patches array (new format) or single patch (legacy)
+    const patches = s.patches || [{ filePath: s.filePath, search: s.search, replaceWith: s.replaceWith }];
+    // Assume all patches target the same file; save and restore only the original content
+    const targetFile = patches[0].filePath;
+    const original = fs.readFileSync(targetFile, 'utf8');
+    const applyPatches = () => {
+      let patched = original;
+      for (const patch of patches) {
+        patched = patched.replace(patch.search, patch.replaceWith);
+      }
+      fs.writeFileSync(targetFile, patched, 'utf8');
+    };
+    const revertPatches = () => {
+      fs.writeFileSync(targetFile, original, 'utf8');
+    };
+
+
 
     const times = [];
     let failed = false;
@@ -103,7 +118,7 @@ const { spawn } = require('child_process');
           await page.evaluate(s.preEval);
         }
       }
-      fs.writeFileSync(s.filePath, patched, 'utf8');
+      applyPatches();
       // If scenario has postPatchEval, run it after patching
       if (s.postPatchEval) {
         if (typeof s.postPatchEval === 'function') {
@@ -149,8 +164,8 @@ const { spawn } = require('child_process');
         times.push(Number.POSITIVE_INFINITY); // Mark as failed
         failed = true;
       }
-      // Revert file after each run
-      fs.writeFileSync(s.filePath, original, 'utf8');
+      // Revert all patches after each run
+      revertPatches();
       // Give time for hot reload to process revert
       await new Promise((r) => setTimeout(r, 2000));
     }

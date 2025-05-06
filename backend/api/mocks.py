@@ -7,8 +7,11 @@ today = datetime.now()
 
 # Users
 USERS = [
-    {"id": i, "name": f"User {i}", "email": f"user{i}@example.com"}
-    for i in range(1, NUM_ITEMS + 1)
+    {"id": 1, "name": "Admin User", "email": "admin@admin.com"},
+    *[
+        {"id": i, "name": f"User {i}", "email": f"user{i}@example.com"}
+        for i in range(2, NUM_ITEMS + 1)
+    ]
 ]
 
 # Products
@@ -45,8 +48,11 @@ INVENTORY = [
 
 # Customers
 CUSTOMERS = [
-    {"id": i, "name": f"Customer {i}", "email": f"customer{i}@example.com"}
-    for i in range(1, NUM_ITEMS + 1)
+    {"id": 1, "name": "Admin Customer", "email": "admin@admin.com"},
+    *[
+        {"id": i, "name": f"Customer {i}", "email": f"customer{i}@example.com"}
+        for i in range(2, NUM_ITEMS + 1)
+    ]
 ]
 
 # Suppliers

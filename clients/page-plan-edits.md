@@ -8,7 +8,7 @@
 8.  New Notification – default message → “You have a new notification!”
 9.  Home Page – text Hello world → Welcome to HotReload Benchmark!
 10. Layout/NavMenu – background color #ffffff → #007ACC (blue)
-11. User Profile Page – avatar border‑radius → 50%
+11. Users List – highlight admin users with a badge in the name column if email ends with @admin.com
 12. Orders List – row hover color → #eef
 13. Inventory List badge – .badge-low background → red
 14. Add Invoice Form – button text Submit → Create Invoice
