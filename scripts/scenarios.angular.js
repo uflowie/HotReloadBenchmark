@@ -84,7 +84,6 @@ module.exports = [
     postPatchEval: async (page) => {
       await page.locator('mat-select[formcontrolname=method]').click();
     },
-
   },
   {
     name: 'Scenario 7 (Create Ticket: textarea rows 4 → 5)',
@@ -179,4 +178,162 @@ module.exports = [
     expectedText: 'Admin',
     url: 'http://localhost:4200/users',
   },
+  {
+    name: 'Scenario 12 (Orders List: two grid variants with custom headers)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/orders-list.component.ts'),
+        search: '</table>',
+        replaceWith: `</table>
+<!-- Variant tables for scenario 12 -->
+<h3>Variant 1: Qty header</h3>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let order">{{order.id}}</td>
+  </ng-container>
+  <ng-container matColumnDef="productId">
+    <th mat-header-cell *matHeaderCellDef>PID</th>
+    <td mat-cell *matCellDef="let order">{{order.productId}}</td>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
+    <td mat-cell *matCellDef="let order">{{order.quantity}}</td>
+  </ng-container>
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+    <td mat-cell *matCellDef="let order">{{order.total | currency}}</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="['id','productId','quantity','total']"></tr>
+  <tr mat-row *matRowDef="let row; columns:['id','productId','quantity','total'];"></tr>
+</table>
+<h3>Variant 2: PID header</h3>
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let order">{{order.id}}</td>
+  </ng-container>
+  <ng-container matColumnDef="productId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>PID</th>
+    <td mat-cell *matCellDef="let order">{{order.productId}}</td>
+  </ng-container>
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef>Quantity</th>
+    <td mat-cell *matCellDef="let order">{{order.quantity}}</td>
+  </ng-container>
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+    <td mat-cell *matCellDef="let order">{{order.total | currency}}</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="['id','productId','quantity','total']"></tr>
+  <tr mat-row *matRowDef="let row; columns:['id','productId','quantity','total'];"></tr>
+</table>
+`,
+      }
+    ],
+    url: 'http://localhost:4200/orders',
+    waitForFn: {
+      fn: () => {
+        const headers = Array.from(document.querySelectorAll('h3')).map(h => h.textContent.trim());
+        return headers.includes('Variant 1: Qty header') && headers.includes('Variant 2: PID header');
+      },
+      args: undefined,
+      timeout: 10000
+    }
+  },
+  {
+    name: 'Scenario 13 (Orders List: add Actions column with View button)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/orders-list.component.ts'),
+        search: 'displayedColumns: string[] = [\'id\', \'productId\', \'quantity\', \'total\'];',
+        replaceWith: 'displayedColumns: string[] = [\'id\', \'productId\', \'quantity\', \'total\', \'actions\'];'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/orders-list.component.ts'),
+        search: '<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>',
+        replaceWith: `<ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let order"><button>View</button></td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>`
+      }
+    ],
+    selector: 'button',
+    expectedText: 'View',
+    url: 'http://localhost:4200/orders'
+  },
+  {
+    name: 'Scenario 14 (Create Ticket Form: change Issue label, add placeholder, rename Submit button)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: '<mat-label>Issue</mat-label>',
+        replaceWith: '<mat-label>Description</mat-label>'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: '<textarea matInput formControlName="issue" rows="4" required></textarea>',
+        replaceWith: '<textarea matInput formControlName="issue" rows="4" required placeholder="Describe the issue here..."></textarea>'
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: '<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading">Submit</button>',
+        replaceWith: '<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading">Submit Ticket</button>'
+      }
+    ],
+    selector: 'textarea[formcontrolname=issue]',
+    expectedText: '',
+    url: 'http://localhost:4200/create-ticket',
+    waitForFn: {
+      fn: () => {
+        const el = document.querySelector('textarea[formcontrolname=issue]');
+        const btn = document.querySelector('button[type="submit"]');
+        return el?.getAttribute('placeholder') === 'Describe the issue here...' && btn?.textContent.trim() === 'Submit Ticket';
+      },
+      args: undefined,
+      timeout: 10000
+    }
+  },
+  {
+    name: 'Scenario 15 (Create Ticket Form: add Priority dropdown)',
+    patches: [
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: '<mat-error *ngIf="form.get(\'issue\')?.hasError(\'required\')">Issue is required</mat-error>',
+        replaceWith: `<mat-error *ngIf="form.get('issue')?.hasError('required')">Issue is required</mat-error>
+      <mat-form-field appearance="fill" style="width: 100%; max-width: 400px;">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority" required>
+          <mat-option value="Low">Low</mat-option>
+          <mat-option value="Medium">Medium</mat-option>
+          <mat-option value="High">High</mat-option>
+        </mat-select>
+      </mat-form-field>`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: "issue: \['', Validators.required\]",
+        replaceWith: `issue: ['', Validators.required],
+    priority: ['Medium', Validators.required]`
+      },
+      {
+        filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
+        search: 'issue: this.form.value.issue',
+        replaceWith: `issue: this.form.value.issue,
+      priority: this.form.value.priority`
+      }
+    ],
+    selector: 'mat-select[formcontrolname=priority]',
+    expectedText: 'Medium',
+    url: 'http://localhost:4200/create-ticket',
+    waitForFn: {
+      fn: () => {
+        const sel = document.querySelector('mat-select[formcontrolname="priority"]');
+        return sel && sel.textContent.includes('Medium');
+      },
+      args: undefined,
+      timeout: 10000
+    }
+  }
 ];

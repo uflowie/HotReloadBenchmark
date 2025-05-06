@@ -3,4 +3,5 @@ export interface Ticket {
   customerId: number;
   issue: string;
   status?: string;
+  priority?: string;
 }
