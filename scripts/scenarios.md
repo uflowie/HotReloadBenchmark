@@ -1,5 +1,5 @@
 1.  Users List – change heading <h2>Users List</h2> → <h2>All Users</h2>
-2.  Products List – prepend € to price template {{product.price | currency}} → {{'€' + product.price}}
+2.  Products List – prepend € to price template
 3.  Inventory List – default page size 10 → 15
 4.  Customers List – rename column Email → Contact Email
 5.  Add Supplier Form – add placeholder="Enter supplier name" to name input

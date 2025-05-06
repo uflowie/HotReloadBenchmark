@@ -51,7 +51,7 @@ const { spawn } = require('child_process');
     },
     blazor: {
       cmd: 'dotnet',
-      args: ['watch', 'run'],
+      args: ['watch'],
       cwd: path.resolve(__dirname, '../clients/blazor'),
       url: 'http://localhost:5000',
     },

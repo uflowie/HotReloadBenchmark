@@ -3,7 +3,7 @@
 @inject BlazorClient.ApiClient Api
 
 <h3>Inventory List</h3>
-<RadzenDataGrid Data="inventory" TItem="BlazorClient.InventoryItem" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
+<RadzenDataGrid Data="inventory" ShowPagingSummary="true" TItem="BlazorClient.InventoryItem" AllowPaging="true" AllowFiltering="true" AllowSorting="true">
     <Columns>
         <RadzenDataGridColumn TItem="BlazorClient.InventoryItem" Property="Id" Title="ID" />
         <RadzenDataGridColumn TItem="BlazorClient.InventoryItem" Property="ProductId" Title="Product ID" />

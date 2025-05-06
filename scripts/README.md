@@ -4,12 +4,12 @@ This document describes how to add and configure new scenarios for the Angular h
 
 ## Files to edit
 
-- **scripts/scenarios.angular.js**: exports an array of scenario objects.
+- **scripts/scenarios.<framework>.js**: exports an array of scenario objects.
 - **scripts/scenarios.md**: a markdown summary list matching the order and descriptions of your scenarios.
 
 ---
 
-## Scenario Object Structure (scenarios.angular.js)
+## Scenario Object Structure (scenarios.<framework>.js)
 
 Each scenario is an object with the following properties:
 
@@ -41,7 +41,7 @@ Each scenario is an object with the following properties:
 
 ## Markdown Summary (scenarios.md)
 
-Maintain a numbered list matching each scenario in `scenarios.angular.js`:
+Maintain a numbered list matching each scenario in `scenarios.<framework>.js`:
 
 1. Brief description
 2. …
@@ -56,8 +56,9 @@ Example entry:
 
 ## How to add a new scenario
 
-1. Open `scripts/scenarios.angular.js` and append a new object at the end of the array.
+1. Open `scripts/scenarios.<framework>.js` and append a new object at the end of the array.
 2. Follow the structure above, including `name`, `url`, `patches`, `selector`, and validation fields.
 3. Insert any `preEval`, `postPatchEval`, or `waitForFn` hooks if your scenario needs it.
 4. Update `scripts/scenarios.md` with a matching numbered entry.
-5. Run your hot-reload benchmark to verify: `npm run hot-reload-benchmark --scenario <number>`.
+5. Do NOT apply the scenario changes to the component file directly. The scenario itself should describe the changes to be applied.
+
