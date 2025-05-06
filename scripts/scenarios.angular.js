@@ -2,6 +2,7 @@
 const path = require('path');
 module.exports = [
   {
+    name: 'Scenario 1 (Users List: heading <h2> → All Users)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
@@ -14,6 +15,7 @@ module.exports = [
     url: 'http://localhost:4200/users',
   },
   {
+    name: 'Scenario 2 (Products List: prepend € to price)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/products-list.component.ts'),
@@ -26,6 +28,7 @@ module.exports = [
     url: 'http://localhost:4200/products',
   },
   {
+    name: 'Scenario 3 (Inventory List: default page size 10 → 15)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/inventory-list.component.ts'),
@@ -38,6 +41,7 @@ module.exports = [
     url: 'http://localhost:4200/inventory',
   },
   {
+    name: 'Scenario 4 (Customers List: rename Email → Contact Email)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/customers-list.component.ts'),
@@ -50,6 +54,7 @@ module.exports = [
     url: 'http://localhost:4200/customers',
   },
   {
+    name: 'Scenario 5 (Add Supplier Form: add placeholder to name input)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-supplier.component.ts'),
@@ -62,6 +67,7 @@ module.exports = [
     url: 'http://localhost:4200/add-supplier',
   },
   {
+    name: 'Scenario 6 (Add Payment Form: add PayPal option)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/add-payment.component.ts'),
@@ -81,6 +87,7 @@ module.exports = [
 
   },
   {
+    name: 'Scenario 7 (Create Ticket: textarea rows 4 → 5)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/create-ticket.component.ts'),
@@ -93,13 +100,17 @@ module.exports = [
     selector: 'textarea[formcontrolname=issue]',
     expectedText: '', // rows attribute is not in textContent, so just check existence
     url: 'http://localhost:4200/create-ticket',
-    postPatchEval: async (page) => {
-      const el = await page.locator('textarea[formcontrolname=issue]');
-      const rows = await el.getAttribute('rows');
-      if (rows !== '5') throw new Error('Textarea rows attribute is not 5');
+    waitForFn: {
+      fn: () => {
+        const el = document.querySelector('textarea[formcontrolname=issue]');
+        return el && el.getAttribute('rows') === '5';
+      },
+      args: undefined,
+      timeout: 10000
     }
   },
   {
+    name: 'Scenario 8 (New Notification: default message update)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/new-notification.component.ts'),
@@ -117,6 +128,7 @@ module.exports = [
     }
   },
   {
+    name: 'Scenario 9 (Home Page: text Hello World → Welcome to HotReload Benchmark!)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/home.component.ts'),
@@ -129,6 +141,7 @@ module.exports = [
     url: 'http://localhost:4200/',
   },
   {
+    name: 'Scenario 10 (Layout/NavMenu: background color #ffffff → #007ACC)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/side-nav.component.ts'),
@@ -149,6 +162,7 @@ module.exports = [
     }
   },
   {
+    name: 'Scenario 11 (Users List: highlight admin users with badge)',
     patches: [
       {
         filePath: path.resolve(__dirname, '../clients/angular/src/app/components/users-list.component.ts'),
@@ -165,5 +179,4 @@ module.exports = [
     expectedText: 'Admin',
     url: 'http://localhost:4200/users',
   },
-  // Add more Angular scenarios here if needed
 ];
